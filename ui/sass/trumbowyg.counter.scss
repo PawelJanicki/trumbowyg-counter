@@ -1,0 +1,40 @@
+$light-color: #dee2e6 !default;
+$dark-color: #222 !default;
+
+$modal-submit-color: #2ecc71 !default;
+$modal-reset-color: #EEE !default;
+
+$transition-duration: 150ms !default;
+$slow-transition-duration: 300ms !default;
+
+.trumbowyg-counter {
+    background: $light-color;
+    padding: 9px 5px;
+    font-size: 13px;
+    line-height: 18px;
+    text-transform: uppercase;
+
+    &.trumbowyg-counter-left {
+        text-align: left;
+
+        .chars-counter {
+            padding-left: 10px;
+        }
+    }
+
+    &.trumbowyg-counter-right {
+        text-align: right;
+
+        .words-counter {
+            padding-right: 10px;
+        }
+    }
+
+    &.trumbowyg-counter-center {
+        text-align: center;
+
+        .chars-counter {
+            padding-left: 10px;
+        }
+    }
+}
