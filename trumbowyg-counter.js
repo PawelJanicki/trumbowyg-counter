@@ -1,31 +1,73 @@
 /* ===========================================================
- Trumbowyg counter plugin
+ * Trumbowyg counter plugin
  * ===========================================================
  * Author : Pawel Janicki
  *          http://paweljanicki.info
+ *
+ * Author : Konrad Kraska
+ *
  * License: MIT
+ *
+ * Version: 1.1.0
  */
 
 (function ($) {
-  'use strict';
+    'use strict';
 
-  function initializeCounter(trumbowyg) {
-    $(trumbowyg.$box).append('<span id="trumbowyg-counter" style="position: absolute; bottom: 0; right: 0;"></span>');
+    var defaultOptions = {
+        class: 'trumbowyg-counter',
+        align: 'left',
+        showWordsCounter: true,
+        showCharsCounter: true,
+    };
 
-    $(trumbowyg.$ed).on('tbwchange tbwpaste', function() {
-      $('#trumbowyg-counter').text($(trumbowyg.$ed).text().length);
-    });
-  }
+    function initializeCounter(trumbowyg) {
+        trumbowyg.o.plugins.counter = $.extend(true, {}, defaultOptions, trumbowyg.o.plugins.counter || {});
 
-  $.extend(true, $.trumbowyg, {
-    plugins: {
-      counter: {
-        init: function (trumbowyg) {
-          setTimeout(function() {
-            initializeCounter(trumbowyg);
-          });
-        }
-      }
+        $(trumbowyg.$box).append('<div class="' + trumbowyg.o.plugins.counter.class + ' ' + trumbowyg.o.plugins.counter.class + '-' + trumbowyg.o.plugins.counter.align + '"></div>');
+
+        $(trumbowyg.$box).on('tbwchange tbwpaste', function() {
+            var text = $(trumbowyg.$ed).text(),
+                words = (text !== ''? $(trumbowyg.$ed).text().match(/\S+/g).length: 0),
+                characters = (text !== ''? $(trumbowyg.$ed).text().length: 0),
+                output = '';
+
+            if (trumbowyg.o.plugins.counter.showWordsCounter) {
+                output += '<span class="words-counter">' + words + ' ' + trumbowyg.lang.counter.words + '</span>';
+            }
+
+            if (trumbowyg.o.plugins.counter.showCharsCounter) {
+                output += '<span class="chars-counter">' + characters + ' ' +  trumbowyg.lang.counter.characters + '</span>';
+            }
+
+            $(trumbowyg.$box).find('.' + trumbowyg.o.plugins.counter.class).html(output);
+        }).trigger('tbwchange');
     }
-  });
+
+    $.extend(true, $.trumbowyg, {
+        langs: {
+            en: {
+                counter: {
+                    words: 'Words',
+                    characters: 'Characters'
+                }
+            },
+            pl: {
+                counter: {
+                    words: 'Słów',
+                    characters: 'Znaków'
+                }
+            }
+        },
+
+        plugins: {
+            counter: {
+                init: function (trumbowyg) {
+                    setTimeout(function() {
+                        initializeCounter(trumbowyg);
+                    });
+                }
+            }
+        }
+    });
 })(jQuery);
